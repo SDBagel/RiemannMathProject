@@ -9,6 +9,7 @@
         <Label Text="Welcome to Xamarin.Forms!" 
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
+        <Image Source="https://pre00.deviantart.net/a7c1/th/pre/f/2014/083/0/d/neko_portrait_by_stuffnco-d7bg2ac.jpg" />
     </StackLayout>
 
 </ContentPage>
