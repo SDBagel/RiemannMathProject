@@ -4,6 +4,14 @@
     word-break: break-all;
 }
 
+a {
+    cursor: pointer !important;
+}
+
+.link-color {
+    color: #7af !important;
+}
+
 .content {
     width: 1000px;
     margin: auto;
