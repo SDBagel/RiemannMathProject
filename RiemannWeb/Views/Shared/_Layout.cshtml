@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/animatecss/animate.css" />
 </head>
-<body>
+<body id="body">
     <header class="animated fadeInDown">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container content">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RiemannWeb</a>
+                <a class="navbar-brand" onclick="transitionOut('/')">RiemannWeb</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="~/">Settings</a>
+                            <a class="nav-link text-dark" onclick="transitionOut('/')">Settings</a>
                         </li>
                     </ul>
                 </div>
@@ -43,7 +43,7 @@
 
     <footer class="border-top footer text-muted animated fadeInUp">
         <div class="content">
-            &copy; 2019 - RiemannWeb - <a href="~/Terms">Privacy and Terms</a>
+            &copy; 2019 - RiemannWeb - <a onclick="transitionOut('terms')">Privacy and Terms</a>
         </div>
     </footer>
 

@@ -9,7 +9,8 @@
 @if (showBanner)
 {
     <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
-        Some portions of this site use cookies, and your experience may be hindered by disabling them. <a asp-area="" asp-controller="Home" asp-action="Terms">Learn More</a>.
+        Some portions of this site use cookies, and your experience may be hindered by disabling them. 
+        <a href="~/terms">Learn More</a>.
         <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
             <span aria-hidden="true">Accept</span>
         </button>
