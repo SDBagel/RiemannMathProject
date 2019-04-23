@@ -58,6 +58,14 @@ namespace RiemannWeb
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    "terms",
+                    "terms",
+                    new { controller = "Home", action = "Terms", id = "" });
+                routes.MapRoute(
+                    "app",
+                    "app",
+                    new { controller = "Camera", action = "Index", id = "" });
             });
         }
     }

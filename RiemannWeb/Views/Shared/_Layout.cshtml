@@ -13,12 +13,13 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
 </head>
 <body>
-    <header>
+    <header class="animated fadeInDown">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container content">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RiemannWeb</a>
@@ -40,9 +41,9 @@
         @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted animated fadeInUp">
         <div class="content">
-            &copy; 2019 - RiemannWeb - <a href="~/Home/Terms">Privacy and Terms</a>
+            &copy; 2019 - RiemannWeb - <a href="~/Terms">Privacy and Terms</a>
         </div>
     </footer>
 
