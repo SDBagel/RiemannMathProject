@@ -47,8 +47,9 @@ function transitionOut(url) {
     else {
         animateCSS(document.body, "fadeOut", true, null);
         animateCSS(document.querySelector(".navbar"), "fadeOutUp", true, null);
-        animateCSS(document.querySelector("footer"), "fadeOutDown", true, null);
-        window.location.assign(url);
+        animateCSS(document.querySelector("footer"), "fadeOutDown", true, function () {
+            window.location.assign(url);
+        });
     }
 }
 
@@ -65,8 +66,9 @@ function transitionOutHome(url) {
         if (cycle === features.length) {
             clearInterval(timer);
             animateCSS(document.querySelector(".navbar"), "fadeOutUp", true, null);
-            animateCSS(document.querySelector("footer"), "fadeOutDown", true, null);
-            window.location.assign(url);
+            animateCSS(document.querySelector("footer"), "fadeOutDown", true, function () {
+                window.location.assign(url);
+            });
         }
     }, 150);
 }
