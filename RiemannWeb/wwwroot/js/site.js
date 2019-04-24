@@ -18,6 +18,9 @@ function animateCSS(node, animationName, isPermanent, callback) {
 document.addEventListener("DOMContentLoaded", function () {
     if (window.location.pathname === "/")
         transitionInHome();
+    else {
+        animateCSS(document.body, "fadeIn", true, null);
+    }
 });
 
 function transitionInHome() {

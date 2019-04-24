@@ -17,6 +17,24 @@ a {
     margin: auto;
 }
 
+.fullscreen {
+    position: absolute;
+    top: 55px;
+    bottom: 55px;
+    left: 0;
+    right: 0;
+}
+
+.fullscreen input {
+    width: 100%;
+    height: 60px;
+    border-radius: 0;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+}
+
 .page-center {
     margin-top: 10vh;
     height: 600px;
