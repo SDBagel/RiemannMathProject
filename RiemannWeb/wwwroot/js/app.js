@@ -1,37 +1,41 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const snap = document.getElementById("snap");
-    const errorMsgElement = document.querySelector('span#errorMsg');
+﻿var video = null;
+var canvas = null;
+var snapButton = null;
+var errorMsgElement = null;
 
-    const constraints = {
-        video: {
-            width: innerWidth, height: innerHeight
-        }
-    };
+document.addEventListener("DOMContentLoaded", function () {
+    video = document.getElementById("video");
+    canvas = document.getElementById("canvas");
+    snapButton = document.getElementById("snapButton");
+    errorMsgElement = document.querySelector("span#errorMsg");
 
-    // Access webcam
-    async function init() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            handleSuccess(stream);
-        } catch (e) {
-            errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
-        }
+    init();
+});
+
+const constraints = {
+    video: {
+        width: innerWidth, height: innerHeight
     }
+};
 
-    // Success
-    function handleSuccess(stream) {
+async function init() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         window.stream = stream;
         video.srcObject = stream;
+    } catch (e) {
+        errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
     }
+}
 
-    // Load init
-    init();
+function snap() {
+    video.pause();
+    snapButton.onclick = retake;
+    snapButton.value = "Retake";
+}
 
-    // Draw image
-    var context = canvas.getContext('2d');
-    snap.addEventListener("click", function () {
-        video.pause();
-    });
-});
+function retake() {
+    video.play();
+    snapButton.onclick = snap;
+    snapButton.value = "Capture";
+}
