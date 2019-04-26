@@ -20,17 +20,33 @@ a {
 .fullscreen {
     position: absolute;
     top: 55px;
-    bottom: 55px;
+    bottom: 54px;
     left: 0;
     right: 0;
 }
 
 .fullscreen input {
-    width: 100%;
+    width: 300px;
     height: 60px;
     border-radius: 0;
+    border-top-right-radius: 25px;
     position: absolute;
     bottom: 0px;
+    left: 0;
+}
+
+.fullscreen .capture {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+
+.fullscreen canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
 }
@@ -141,8 +157,8 @@ footer {
         font-size: 26px;
     }
 
-    #start-button {
-        
+    .fullscreen input {
+        width: 200px;
     }
 
     .feature div {

@@ -1,15 +1,37 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    Webcam.set({
-        width: innerWidth,
-        height: innerHeight - 120,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-    Webcam.attach("#camera");
-});
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const snap = document.getElementById("snap");
+    const errorMsgElement = document.querySelector('span#errorMsg');
 
-function take_snapshot() {
-    Webcam.snap(function (data_uri) {
-        document.getElementById("camera").innerHTML = '<img src="' + data_uri + '"/>';
+    const constraints = {
+        video: {
+            width: innerWidth, height: innerHeight
+        }
+    };
+
+    // Access webcam
+    async function init() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            handleSuccess(stream);
+        } catch (e) {
+            errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+        }
+    }
+
+    // Success
+    function handleSuccess(stream) {
+        window.stream = stream;
+        video.srcObject = stream;
+    }
+
+    // Load init
+    init();
+
+    // Draw image
+    var context = canvas.getContext('2d');
+    snap.addEventListener("click", function () {
+        video.pause();
     });
-}
+});

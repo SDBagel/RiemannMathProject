@@ -2,10 +2,13 @@
     ViewData["Title"] = "Index";
 }
 
-<script type="text/javascript" src="~/lib/webcamjs/webcam.min.js"></script>
 <script type="text/javascript" src="~/js/app.js"></script>
 
 <div class="fullscreen bg-light">
-    <div id="camera"></div>
-    <input class="btn btn-light" type=button value="Take Snapshot" onClick="take_snapshot()">
+    <span id="errorMsg"></span>
+
+    <video id="video" class="capture" playsinline autoplay></video>
+    <canvas id="canvas" class="capture"></canvas>
+
+    <input id="snap" type="button" value="Capture" class="btn btn-info">
 </div>
