@@ -5,10 +5,13 @@
 <script type="text/javascript" src="~/js/app.js"></script>
 
 <div class="fullscreen bg-light">
+    <canvas id="canvas" class="capture"></canvas>
+
+    <div id="controls" class="bg-light">
+        <input id="snapButton" class="button btn btn-info" onclick="snap()" type="button" value="Capture">
+        <label class="button btn btn-light border-bottom"><span class="btn">Upload</span><input type="file" accept="image/*" capture="capture" style="display: none;"></label>
+    </div>
     <span id="errorMsg"></span>
 
     <video id="video" class="capture" playsinline autoplay></video>
-    <canvas id="canvas" class="capture"></canvas>
-
-    <input id="snapButton" onclick="snap()" type="button" value="Capture" class="btn btn-info">
 </div>

@@ -1,11 +1,9 @@
 ﻿var video = null;
-var canvas = null;
 var snapButton = null;
 var errorMsgElement = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     video = document.getElementById("video");
-    canvas = document.getElementById("canvas");
     snapButton = document.getElementById("snapButton");
     errorMsgElement = document.querySelector("span#errorMsg");
 
