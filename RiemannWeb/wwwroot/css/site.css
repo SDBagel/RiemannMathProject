@@ -46,16 +46,17 @@ a {
 .fullscreen #help {
     display: none;
     width: 350px;
+    min-height: 100%;
     padding: 30px;
     text-align: justify;
     position: absolute;
     top: 0;
-    bottom: 0;
     right: 0;
 }
 
 .fullscreen #helpButton {
-    width: 140px;
+    width: 80px;
+    height: 40px;
     border-top-left-radius: 10px;
     position: absolute;
     bottom: 0;
@@ -202,7 +203,7 @@ footer {
         margin-top: 0;
     }
     .fullscreen {
-        bottom: 0;
+        bottom: 24px;
     }
     .fullscreen #help {
         width: 100%;
@@ -210,7 +211,6 @@ footer {
         left: 0;
     }
     footer {
-        position: absolute;
-        bottom: -54px;
+        padding: 0;
     }
 }
