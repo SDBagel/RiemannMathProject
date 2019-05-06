@@ -7,11 +7,18 @@
 <div class="fullscreen bg-light">
     <canvas id="canvas" class="capture"></canvas>
 
+    <video id="video" class="capture" playsinline autoplay></video>
+
     <div id="controls" class="bg-light">
-        <input id="snapButton" class="button btn btn-info" onclick="snap()" type="button" value="Capture">
+        <input id="snapButton" class="button btn btn-info" onclick="snap()" type="button" value="Capture" />
         <label class="button btn btn-light border-bottom"><span class="btn">Upload</span><input type="file" accept="image/*" capture="capture" style="display: none;"></label>
     </div>
-    <span id="errorMsg"></span>
 
-    <video id="video" class="capture" playsinline autoplay></video>
+    <div id="help" class="bg-light">
+        <h1>Help</h1>
+        <p>This is a help menu. It should be able to be expanded, closed, and work on mobile.</p>
+    </div>
+    <input id="helpButton" class="button btn btn-info" onclick="helpToggle()" type="button" value="Help" />
+
+    <span id="errorMsg"></span>
 </div>
