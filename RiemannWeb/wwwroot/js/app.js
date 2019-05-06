@@ -41,10 +41,10 @@ function retake() {
 }
 
 function helpToggle() {
-    if (helpMenu.style.display === "none") {
-        helpMenu.style.display = "block";
+    if (helpMenu.style.display === "block") {
+        helpMenu.style.display = "none";
     }
     else {
-        helpMenu.style.display = "none";
+        helpMenu.style.display = "block";
     }
 }
