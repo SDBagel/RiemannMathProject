@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.location.pathname === "/")
         transitionInHome();
     else {
-        animateCSS(document.body, "fadeIn", true, null);
+        animateCSS(document.querySelector("#view"), "fadeIn", true, null);
     }
 });
 
@@ -45,11 +45,8 @@ function transitionOut(url) {
     if (window.location.pathname === "/")
         transitionOutHome(url);
     else {
-        animateCSS(document.body, "fadeOut", true, null);
-        animateCSS(document.querySelector(".navbar"), "fadeOutUp", true, null);
-        animateCSS(document.querySelector("footer"), "fadeOutDown", true, function () {
-            window.location.assign(url);
-        });
+        animateCSS(document.querySelector("#view"), "fadeOut", true, null);
+        window.location.assign(url);
     }
 }
 
@@ -65,10 +62,7 @@ function transitionOutHome(url) {
         cycle += 1;
         if (cycle === features.length) {
             clearInterval(timer);
-            animateCSS(document.querySelector(".navbar"), "fadeOutUp", true, null);
-            animateCSS(document.querySelector("footer"), "fadeOutDown", true, function () {
-                window.location.assign(url);
-            });
+            window.location.assign(url);
         }
     }, 150);
 }
