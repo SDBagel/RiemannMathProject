@@ -1,45 +1,39 @@
-﻿var video = null;
-var canvas = null;
-var snapButton = null;
-var errorMsgElement = null;
-var helpMenu = null;
+﻿var video, canvas, file, snapButton;
+var errorMsgElement, helpMenu = null;
 
 var ctx;
 var mouseX, mouseY, mouseDown = 0;
 var touchX, touchY;
 
+var points = [[[]]];
+
 document.addEventListener("DOMContentLoaded", function () {
     video = document.getElementById("video");
     canvas = document.getElementById("canvas");
+    file = document.getElementById("file");
     snapButton = document.getElementById("snapButton");
+
     errorMsgElement = document.querySelector("span#errorMsg");
     helpMenu = document.querySelector("#help");
 
     init();
+
+    file.onchange = preview;
 
     canvas.height = innerHeight - 110;
     canvas.width = innerWidth;
     if (canvas.getContext)
         ctx = canvas.getContext("2d");
 
-    // Check that we have a valid context to draw on/with before adding event handlers
     if (ctx) {
-        // React to mouse events on the canvas, and mouseup on the entire document
         canvas.addEventListener('mousedown', sketchpad_mouseDown, false);
         canvas.addEventListener('mousemove', sketchpad_mouseMove, false);
         window.addEventListener('mouseup', sketchpad_mouseUp, false);
 
-        // React to touch events on the canvas
         canvas.addEventListener('touchstart', sketchpad_touchStart, false);
         canvas.addEventListener('touchmove', sketchpad_touchMove, false);
     }
 });
-
-const constraints = {
-    video: {
-        width: innerWidth, height: innerHeight
-    }
-};
 
 function onMobile() {
     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i)
@@ -55,6 +49,12 @@ function onMobile() {
 }
 
 async function init() {
+    const constraints = {
+        video: {
+            width: innerWidth, height: innerHeight
+        }
+    };
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         window.stream = stream;
@@ -86,6 +86,32 @@ function retake() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function preview() {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById("upload").src = e.target.result;
+    };
+    reader.readAsDataURL(this.files[0]);
+
+    canvas.style.display = "block";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    video.style.display = "none";
+    snapButton.value = "Use Camera";
+    snapButton.onclick = clearPreview;
+}
+
+function clearPreview() {
+    video.style.display = "block";
+    document.getElementById("upload").src = "";
+
+    canvas.style.display = "none";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    snapButton.value = "Capture";
+    snapButton.onclick = snap;
+}
+
 function helpToggle() {
     if (helpMenu.style.display === "block") {
         helpMenu.style.display = "none";
@@ -96,7 +122,7 @@ function helpToggle() {
 }
 
 function drawDot(ctx, x, y, size) {
-    r = 0; g = 0; b = 0; a = 150;
+    r = 50; g = 50; b = 50; a = 150;
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
 
     ctx.beginPath();
@@ -153,10 +179,10 @@ function getTouchPos(e) {
         e = event;
 
     if (e.touches) {
-        if (e.touches.length === 1) { // Only deal with one finger
-            var touch = e.touches[0]; // Get the information for finger #1
+        if (e.touches.length === 1) {
+            var touch = e.touches[0];
             touchX = touch.pageX;
-            touchY = touch.pageY;
+            touchY = touch.pageY - 50;
         }
     }
 }
