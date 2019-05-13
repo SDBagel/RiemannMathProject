@@ -93,7 +93,6 @@ a {
 
 #errorMsg {
     display: none;
-    background-color: #fff;
     border-radius: 20px;
     position: absolute;
     width: 300px;

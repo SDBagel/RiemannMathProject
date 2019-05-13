@@ -1,22 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Index";
+    ViewData["DarkMode"] = true;
 }
 
 <script type="text/javascript" src="~/js/app.js"></script>
 
-<div class="fullscreen bg-light">
-    <span id="errorMsg"></span>
+<div class="fullscreen">
+    <span id="errorMsg" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light")"></span>
 
     <video id="video" class="capture" playsinline autoplay></video>
     <img id="upload" />
     <canvas id="canvas" class="capture"></canvas>
 
-    <div id="controls" class="bg-light border-bottom border-right">
+    <div id="controls" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-bottom border-right">
         <input id="snapButton" class="button btn btn-info border-bottom" onclick="snap()" type="button" value="Capture" />
         <label class="button btn btn-info border-bottom"><span class="btn">Upload</span><input id="file" type="file" accept="image/*" capture="capture" style="display:none;"></label>
     </div>
 
-    <div id="help" class="bg-light border-left">
+    <div id="help" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-left">
         <h1>Help</h1>
         <h2>I'm Getting an Error</h2>
         <p>We apologize for the inconvinience that the site does not function on your device. Please attempt to use the "Upload" option instead. If on mobile, this button will automatically activate your camera and you can proceed normally. Some older browsers are not supported.</p>

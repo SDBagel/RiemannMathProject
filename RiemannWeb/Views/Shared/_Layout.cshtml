@@ -18,9 +18,9 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/animatecss/animate.css" />
 </head>
-<body>
+<body class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") @((bool)ViewData["DarkMode"]?"text-light":"text-dark")">
     <header>
-        <nav class="navbar navbar-light border-bottom box-shadow mb-3">
+        <nav class="navbar border-bottom box-shadow mb-3">
             <div class="container content">
                 <a class="navbar-brand" onclick="transitionOut('/')">RiemannWeb</a>
                 <a class="navbar-nav nav-item nav-link" onclick="transitionOut('/')">Settings</a>
@@ -32,7 +32,7 @@
         @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-top footer text-muted">
         <div class="content">
             &copy; 2019 - RiemannWeb - <a class="link-color" onclick="transitionOut('terms')">Privacy and Terms</a>
         </div>
