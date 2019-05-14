@@ -1,4 +1,6 @@
 # RiemannMathProject
+![Yolo'd Code: 100%](https://sdbagel.github.io/static/img/yolo.png)
+
 This is our group's semester two maths project. Our topic is Riemann sums, which approximate the area underneath a polynomial curve.
 
 # What is this?
@@ -9,9 +11,7 @@ This is our part of our "physical product" which we will demonstrate on presenta
 
 # How does it work?
 
-At the moment, a live camera feed and some nice UX is implemented. The live camera feed only functions on non-mobile devices due to issues with video autoplay and other camera features we are using. This will get updated with a fix soon.
-
-In the future, a canvas will allow users to draw fluid curves tracing their object which will automatically calculate the area after the fact. More details can be found on our projects boards for this repository.
+A live camera feed (desktop only) or file upload button (opens camera on mobile) allows the user to select an image for use with our calculator. They trace the object they want to find the area of using their mouse or touchscreen, where each press and release action denotes one "equation" to find the Riemann sum of. This action logs datapoints which we use a regression library on to get our equation. The user then selects a length on the screen to provide a measurement, otherwise, a measurement is assumed and the results page is shown.
 
 # Other info
 
