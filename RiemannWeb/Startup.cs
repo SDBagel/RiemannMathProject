@@ -57,6 +57,10 @@ namespace RiemannWeb
                     "terms",
                     new { controller = "Home", action = "Terms", id = "" });
                 routes.MapRoute(
+                    "settings",
+                    "settings",
+                    new { controller = "Home", action = "Settings", id = "" });
+                routes.MapRoute(
                     "app",
                     "app",
                     new { controller = "Camera", action = "Index", id = "" });

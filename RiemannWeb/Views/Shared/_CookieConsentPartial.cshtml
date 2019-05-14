@@ -9,7 +9,7 @@
 @if (showBanner)
 {
     <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
-        Some portions of this site use cookies, and your experience may be hindered by disabling them. 
+        Site settings use cookies and your preferences will not be saved if you do not accept.
         <a href="~/terms">Learn More</a>.
         <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
             <span aria-hidden="true">Accept</span>
@@ -20,6 +20,7 @@
             var button = document.querySelector("#cookieConsent button[data-cookie-string]");
             button.addEventListener("click", function (event) {
                 document.cookie = button.dataset.cookieString;
+                document.getElementById("cookieConsent").style.display = "none";
             }, false);
         })();
     </script>
