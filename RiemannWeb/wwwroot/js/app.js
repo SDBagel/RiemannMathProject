@@ -5,7 +5,8 @@ var ctx;
 var mouseX, mouseY, mouseDown = 0;
 var touchX, touchY;
 
-var points = [[[]]];
+var points = [];
+var equation = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     video = document.getElementById("video");
@@ -22,9 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     canvas.height = innerHeight - 110;
     canvas.width = innerWidth;
+
+    // Attach event handlers for canvas
     if (canvas.getContext)
         ctx = canvas.getContext("2d");
-
     if (ctx) {
         canvas.addEventListener('mousedown', sketchpad_mouseDown, false);
         canvas.addEventListener('mousemove', sketchpad_mouseMove, false);
@@ -35,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Check if on mobile device
 function onMobile() {
     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i)
         || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)
@@ -71,6 +74,7 @@ async function init() {
     }
 }
 
+// Freezes video and enables canvas editing
 function snap() {
     video.pause();
     snapButton.onclick = retake;
@@ -78,6 +82,7 @@ function snap() {
     canvas.style.display = "block";
 }
 
+// Unfreezes video, clears canvas, disables editing
 function retake() {
     video.play();
     snapButton.onclick = snap;
@@ -86,6 +91,7 @@ function retake() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+// Display a image from upload button
 function preview() {
     var reader = new FileReader();
     reader.onload = function (e) {
@@ -101,6 +107,7 @@ function preview() {
     snapButton.onclick = clearPreview;
 }
 
+// Clear the image preview
 function clearPreview() {
     video.style.display = "block";
     document.getElementById("upload").src = "";
@@ -112,6 +119,7 @@ function clearPreview() {
     snapButton.onclick = snap;
 }
 
+// Toggle show help menu
 function helpToggle() {
     if (helpMenu.style.display === "block") {
         helpMenu.style.display = "none";
@@ -124,6 +132,9 @@ function helpToggle() {
 function drawDot(ctx, x, y, size) {
     r = 50; g = 50; b = 50; a = 150;
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
+
+    // Adds new 2D point to the equation
+    equation.push(new Array(2, x, y));
 
     ctx.beginPath();
     ctx.arc(x, y, size, 0, Math.PI * 2, true);
@@ -138,6 +149,10 @@ function sketchpad_mouseDown() {
 
 function sketchpad_mouseUp() {
     mouseDown = 0;
+
+    // push equation to points array
+    points.push(equation);
+    equation = [];
 }
 
 function sketchpad_mouseMove(e) {
@@ -163,6 +178,10 @@ function getMousePos(e) {
 }
 
 function sketchpad_touchStart() {
+    // push equation to points array
+    points.push(equation);
+    equation = [];
+
     getTouchPos();
     drawDot(ctx, touchX, touchY, 8);
     event.preventDefault();

@@ -1,7 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http.Features
+
+@{
     ViewData["Title"] = "Home";
+
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
 }
 
 <partial name="_CookieConsentPartial" />
-<h1>Settings</h1>
-<a asp-action="ToggleDarkMode" class="btn btn-info">Toggle Dark Mode</a>
+<br />
+
+<div class="page-center">
+    <h1>Settings</h1>
+    <hr class="bg-light" />
+    <a asp-action="ToggleDarkMode" class="btn btn-info">Toggle Dark Mode</a>
+    <a asp-action="WithdrawCookieConsent" class="btn btn-info">Reset Cookie Preferences</a>
+</div>

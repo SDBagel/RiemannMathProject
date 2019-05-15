@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using RiemannWeb.Models;
 
@@ -49,9 +50,18 @@ namespace RiemannWeb.Controllers
                     new CookieOptions()
                     {
                         Path = "/",
-                        Expires = DateTime.MaxValue
+                        Expires = DateTime.Now.AddDays(30)
                     }
                 );
+
+            return Redirect("~/settings");
+        }
+        
+        public IActionResult WithdrawCookieConsent()
+        {
+            var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
+            consentFeature.WithdrawConsent();
+            Response.Cookies.Delete("DarkMode");
 
             return Redirect("~/settings");
         }
