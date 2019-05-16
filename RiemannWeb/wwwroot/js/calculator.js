@@ -33,7 +33,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
 
     //Jump to the earliest point that isn't max or min
     for (var iteration = 0; maxOrMin === true; iteration++) {
-        if (xDataPoints[iteration] !== Math.max(...xDataPoints) && xDataPoints[iteration] != Math.min(...xDataPoints)) {
+        if (xDataPoints[iteration] !== Math.max(...xDataPoints) && xDataPoints[iteration] !== Math.min(...xDataPoints)) {
             startingPoint = iteration;
             maxOrMin = false;
         }
@@ -88,7 +88,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 }
             }
         }
-        if (xDataPoints[specificDataPoint] !== Math.min(...xDataPoints) && xDataPoints[specificDataPoint] != Math.max(...xDataPoints)) {
+        if (xDataPoints[specificDataPoint] !== Math.min(...xDataPoints) && xDataPoints[specificDataPoint] !== Math.max(...xDataPoints)) {
             if (currentFunction === 0) {
                 firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
             } else if (currentFunction === 1) {
@@ -103,10 +103,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     console.log("second function data: ");
     console.log(secondFunctionDataPoints);
 
-
-
-
-    var regression = require("regression")
+    var regression = require("regression");
     const result = regression.polynomial(firstFunctionDataPoints, { order: order });
     const result1 = regression.polynomial(secondFunctionDataPoints, { order: order });
     console.log("First function regression coefficients: ");
@@ -114,7 +111,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     console.log("Second function regression coefficients: ");
     console.log(result1.equation);
     var firstFunctionCoefficients = result.equation;
-    var secondFunctionCoefficients = result1.equation;;
+    var secondFunctionCoefficients = result1.equation;
     // Coefficients of equations, where a row is (x^0, x^1, x^2...), and every column represents a new equation
     // Restrictions set to define area
     var domainRestrictionLower = Math.min(...xDataPoints);
@@ -203,7 +200,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 areaL = areaL + Math.abs((rangeRestrictionUpper - y(x + accuracy, coefficients)) * accuracy);
                 areaR = areaR + Math.abs((rangeRestrictionUpper - y(x, coefficients)) * accuracy);
                 areaM = areaM + Math.abs((rangeRestrictionUpper - y(x + accuracy * 0.5, coefficients)) * accuracy);
-                length = length + distanceFormula(x, coefficients, accuracy);;
+                length = length + distanceFormula(x, coefficients, accuracy);
                 areaT = areaT + Math.abs(rangeRestrictionUpper * accuracy - trapezoidalArea(x, coefficients, accuracy));
                 x = x + accuracy;
 
@@ -212,13 +209,11 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
 
         }
 
-
-
         return [areaL, areaM, areaR, areaT, length];
     }
     var firstResults = areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy);
     var secondResults = areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy);
-    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), (firstResults[4] + secondResults[4])];
+    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), firstResults[4] + secondResults[4]];
     console.log(areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy));
     console.log(areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy));
     return finalResults;

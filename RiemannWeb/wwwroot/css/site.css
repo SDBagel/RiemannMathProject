@@ -43,6 +43,10 @@ a {
     margin: 0;
 }
 
+.fullscreen #controls #calculate {
+    display: none;
+}
+
 .fullscreen #help {
     display: none;
     width: 350px;

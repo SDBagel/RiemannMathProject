@@ -131,7 +131,7 @@ function helpToggle() {
 
 function drawDot(ctx, x, y, size) {
     r = 50; g = 50; b = 50; a = 150;
-    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
+    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a / 255 + ")";
 
     // Adds new 2D point to the equation
     equation.push(new Array(x, y));
