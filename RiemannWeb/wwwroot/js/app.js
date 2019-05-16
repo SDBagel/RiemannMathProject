@@ -134,7 +134,7 @@ function drawDot(ctx, x, y, size) {
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
 
     // Adds new 2D point to the equation
-    equation.push(new Array(2, x, y));
+    equation.push(new Array(x, y));
 
     ctx.beginPath();
     ctx.arc(x, y, size, 0, Math.PI * 2, true);
@@ -153,6 +153,7 @@ function sketchpad_mouseUp() {
     // push equation to points array
     points.push(equation);
     equation = [];
+    console.log(points);
 }
 
 function sketchpad_mouseMove(e) {
@@ -201,7 +202,7 @@ function getTouchPos(e) {
         if (e.touches.length === 1) {
             var touch = e.touches[0];
             touchX = touch.pageX;
-            touchY = touch.pageY - 50;
+            touchY = touch.pageY - 110;
         }
     }
 }

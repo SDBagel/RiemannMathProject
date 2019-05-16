@@ -1,1 +1,1 @@
-for associated scripts
+for associated scripts used in RiemannWeb
