@@ -48,13 +48,13 @@ function polynomial(data, options) {
     }
     rhs.push(lhs);
 
-    const coefficients = gaussianElimination(rhs, k).map(v => round(v, options.precision));
+    const coefficients = gaussianElimination(rhs, k).map(v => round(v, 2));
 
     const predict = x => [
-        round(x, options.precision),
+        round(x, 2),
         round(
             coefficients.reduce((sum, coeff, power) => sum + coeff * x ** power, 0),
-            options.precision,
+            2,
         )
     ];
 
@@ -76,7 +76,7 @@ function polynomial(data, options) {
         points,
         predict,
         equation: [...coefficients].reverse(),
-        r2: round(determinationCoefficient(data, points), options.precision)
+        r2: round(determinationCoefficient(data, points), 2)
     };
 }
 
@@ -146,49 +146,57 @@ function determinationCoefficient(data, results) {
     return 1 - sse / ssyy;
 }
 
-// dataPoints = 2D array of points
-function areaOfRegion(dataPoints, accuracy, order) {
-    console.log(dataPoints);
+// Script We Wrote
+/*
+    ______
+  (       ))
+  |       ||
+  | toast ||
+  |       ||
+  |_______|/
 
+*/
+
+function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
+    var orderMax = degreeOfApproximationMax;
+    const accuracy = widthOfRegion;
+    var dataPoints = dataInput;
+    console.log(dataPoints);
     var xDataPoints = [];
     var yDataPoints = [];
 
     //extracts x values
-    for (var a = 0; a <= dataPoints.length - 1; a++) {
-        xDataPoints.push(dataPoints[a][0]);
+    for (var iteration = 0; iteration <= dataPoints.length - 1; iteration++) {
+        xDataPoints.push(dataPoints[iteration][0]);
     }
-    for (var b = 0; b <= dataPoints.length - 1; b++) {
-        yDataPoints.push(dataPoints[b][1]);
+    for (var iteration = 0; iteration <= dataPoints.length - 1; iteration++) {
+        yDataPoints.push(dataPoints[iteration][1]);
     }
 
-    var firstFuncPoints = [];
-    var secondFuncPoints = [];
+    var firstFunctionDataPoints = [];
+    var secondFunctionDataPoints = [];
     var currentFunction = 0;
-    var startingPoint = 0;
     var maxOrMin = true;
-
+    var startingPoint = 0;
     //Jump to the earliest point that isn't max or min
-    for (var c = 0; maxOrMin === true; c++) {
-        if (xDataPoints[c] !== Math.max(...xDataPoints) && xDataPoints[c] !== Math.min(...xDataPoints)) {
-            startingPoint = c;
+    for (var iteration = 0; maxOrMin === true; iteration++) {
+        if (xDataPoints[iteration] != Math.max(...xDataPoints) && xDataPoints[iteration] != Math.min(...xDataPoints)) {
+            startingPoint = iteration;
             maxOrMin = false;
         }
     }
-
     var specificDataPoint = startingPoint;
     var firstMax = true;
     var firstMin = true;
-
-    for (var d = 0; d < xDataPoints.length; d++) {
+    for (var iteration = 0; iteration < xDataPoints.length; iteration++) {
         //Makes the iterations in modulus
         if (specificDataPoint > xDataPoints.length - 1) {
             specificDataPoint = 0;
         }
-
         if (xDataPoints[specificDataPoint] === Math.max(...xDataPoints)) {
             if (firstMax === true) {
-                firstFuncPoints.push(dataPoints[specificDataPoint]);
-                secondFuncPoints.push(dataPoints[specificDataPoint]);
+                firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
+                secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
                 firstMax = false;
                 if (currentFunction === 0) {
                     currentFunction = 1;
@@ -197,18 +205,19 @@ function areaOfRegion(dataPoints, accuracy, order) {
                 }
             } else {
                 if (currentFunction === 0) {
-                    firstFuncPoints.pop(dataPoints[specificDataPoint - 1]);
-                    firstFuncPoints.push(dataPoints[specificDataPoint]);
+                    firstFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
+                    firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
                 } else if (currentFunction === 1) {
-                    secondFuncPoints.pop(dataPoints[specificDataPoint - 1]);
-                    secondFuncPoints.push(dataPoints[specificDataPoint]);
+                    secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
+                    secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
+
                 }
             }
         }
         if (xDataPoints[specificDataPoint] === Math.min(...xDataPoints)) {
             if (firstMin === true) {
-                firstFuncPoints.push(dataPoints[specificDataPoint]);
-                secondFuncPoints.push(dataPoints[specificDataPoint]);
+                firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
+                secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
                 firstMin = false;
                 if (currentFunction === 0) {
                     currentFunction = 1;
@@ -217,40 +226,44 @@ function areaOfRegion(dataPoints, accuracy, order) {
                 }
             } else {
                 if (currentFunction === 0) {
-                    firstFuncPoints.pop(dataPoints[specificDataPoint - 1]);
-                    firstFuncPoints.push(dataPoints[specificDataPoint]);
+                    firstFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
+                    firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
                 } else if (currentFunction === 1) {
-                    secondFuncPoints.pop(dataPoints[specificDataPoint - 1]);
-                    secondFuncPoints.push(dataPoints[specificDataPoint]);
+                    secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
+                    secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
+
                 }
             }
         }
-        if (xDataPoints[specificDataPoint] !== Math.min(...xDataPoints) && xDataPoints[specificDataPoint] !== Math.max(...xDataPoints)) {
+        if (xDataPoints[specificDataPoint] != Math.min(...xDataPoints) && xDataPoints[specificDataPoint] != Math.max(...xDataPoints)) {
             if (currentFunction === 0) {
-                firstFuncPoints.push(dataPoints[specificDataPoint]);
+                firstFunctionDataPoints.push(dataPoints[specificDataPoint]);
             } else if (currentFunction === 1) {
-                secondFuncPoints.push(dataPoints[specificDataPoint]);
+                secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
             }
         }
         specificDataPoint++;
     }
 
     console.log("first function data: ");
-    console.log(firstFuncPoints);
+    console.log(firstFunctionDataPoints);
     console.log("second function data: ");
-    console.log(secondFuncPoints);
+    console.log(secondFunctionDataPoints);
 
-    var result = polynomial(firstFuncPoints, { order: order, precision: 2 });
-    var result1 = polynomial(secondFuncPoints, { order: order, precision: 2 });
-
+    var errorListFOne = [];
+    var errorListFTwo = [];
+    for (var iteration = 2; iteration <= orderMax; iteration++) {
+        errorListFOne.push(polynomial(firstFunctionDataPoints, { order: iteration }));
+        errorListFTwo.push(polynomial(secondFunctionDataPoints, { order: iteration }));
+    }
+    const result = polynomial(firstFunctionDataPoints, { order: errorListFOne.indexOf(Math.max(...errorListFOne)) + 3 });
+    const result1 = polynomial(secondFunctionDataPoints, { order: orderMax });
     console.log("First function regression coefficients: ");
     console.log(result.equation);
     console.log("Second function regression coefficients: ");
     console.log(result1.equation);
-
     var firstFunctionCoefficients = result.equation;
     var secondFunctionCoefficients = result1.equation;
-
     // Coefficients of equations, where a row is (x^0, x^1, x^2...), and every column represents a new equation
     // Restrictions set to define area
     var domainRestrictionLower = Math.min(...xDataPoints);
@@ -258,13 +271,38 @@ function areaOfRegion(dataPoints, accuracy, order) {
     var rangeRestrictionLower = Math.min(...yDataPoints);
     var rangeRestrictionUpper = Math.max(...yDataPoints);
     var totalRestrictionArea = (Math.abs(domainRestrictionLower) + Math.abs(domainRestrictionUpper)) * (Math.abs(rangeRestrictionLower) + Math.abs(rangeRestrictionUpper));
-
     console.log("Domain Lower Restriction: " + domainRestrictionLower);
     console.log("Domain Upper Restriction: " + domainRestrictionUpper);
     console.log("Range Lower Restriction: " + rangeRestrictionLower);
     console.log("Range Upper Restriction: " + rangeRestrictionUpper);
 
     //starting x value for the Riehmann sum calculations
+    function y(xValue, coefficients) {
+        var result = 0;
+        for (var iteration = 0; iteration <= coefficients.length - 1; iteration++) {
+            result = result + coefficients[iteration] * Math.pow(xValue, iteration);
+        }
+        if (result > rangeRestrictionLower && result < rangeRestrictionUpper) {
+            return result;
+        } else if (result <= rangeRestrictionLower) {
+            return rangeRestrictionLower;
+        } else if (result >= rangeRestrictionUpper) {
+            return rangeRestrictionUpper;
+        }
+    }
+    function trapezoidalArea(xValue, coefficients, accuracy) {
+        var result = y(xValue + accuracy, coefficients);
+        var result1 = y(xValue, coefficients);
+        return (result - result1) * accuracy / 2 + result1 * accuracy;
+    }
+
+    // Gets distance between two point on curve
+    function distanceFormula(xValue, coefficients, accuracy) {
+        var result = y(xValue + accuracy, coefficients);
+        var result1 = y(xValue, coefficients);
+        return Math.sqrt(Math.pow(result - result1, 2) + Math.pow(accuracy, 2));
+    }
+
     function areaCalculation(coefficients, currentDataset, accuracy) {
         var x = domainRestrictionLower;
         // Values to find
@@ -274,50 +312,16 @@ function areaOfRegion(dataPoints, accuracy, order) {
         var areaR = 0;
         var areaT = 0;
         var length = 0;
-
-        // Finds y value of a given x value and an equation. Returns value given that it does not exceed any restrictions.
-        function y(xValue, coefficients) {
-            var result = 0;
-            for (var iteration = 0; iteration <= coefficients.length - 1; iteration++) {
-                result = result + coefficients[iteration] * Math.pow(xValue, iteration);
-            }
-
-            if (result > rangeRestrictionLower && result < rangeRestrictionUpper) {
-                return result;
-            } else if (result <= rangeRestrictionLower) {
-                return rangeRestrictionLower;
-            } else if (result >= rangeRestrictionUpper) {
-                return rangeRestrictionUpper;
-            }
-        }
-
-        // Finds area of a sinnopgle column, width defined by accuracy
-        function trapezoidalArea(xValue, coefficients, accuracy) {
-            var result = y(xValue + accuracy, coefficients);
-            var result1 = y(xValue, coefficients);
-            return (result - result1) * accuracy / 2 + result1 * accuracy;
-        }
-
-        // Gets distance between two point on curve
-        function distanceFormula(xValue, coefficients, accuracy) {
-            var result = y(xValue + accuracy, coefficients);
-            var result1 = y(xValue, coefficients);
-            return Math.sqrt(Math.pow(result - result1, 2) + Math.pow(accuracy, 2));
-        }
-
-        // Repeats calculation of area until domain restrictions met
         var functionXDataPoints = [];
         var functionYDataPoints = [];
-        for (var e = 0; e <= currentDataset.length - 1; e++) {
-            functionXDataPoints.push(currentDataset[e][0]);
+        for (var iteration = 0; iteration <= currentDataset.length - 1; iteration++) {
+            functionXDataPoints.push(currentDataset[iteration][0]);
         }
-        for (var f = 0; f <= currentDataset.length - 1; f++) {
-            functionYDataPoints.push(currentDataset[f][1]);
+        for (var iteration = 0; iteration <= currentDataset.length - 1; iteration++) {
+            functionYDataPoints.push(currentDataset[iteration][1]);
         }
-
         console.log(functionXDataPoints);
         console.log(functionYDataPoints);
-
         if (Math.min(...functionYDataPoints) === Math.min(...yDataPoints)) {
             while (x <= domainRestrictionUpper - accuracy) {
                 areaL = areaL + Math.abs((y(x, coefficients) - rangeRestrictionLower) * accuracy);
@@ -328,6 +332,8 @@ function areaOfRegion(dataPoints, accuracy, order) {
                 x = x + accuracy;
                 //console.log("Lower Function area. x: " + x + " areaL: " + areaL);
             }
+
+
         }
 
         if (Math.max(...functionYDataPoints) === Math.max(...yDataPoints)) {
@@ -335,25 +341,25 @@ function areaOfRegion(dataPoints, accuracy, order) {
                 areaL = areaL + Math.abs((rangeRestrictionUpper - y(x + accuracy, coefficients)) * accuracy);
                 areaR = areaR + Math.abs((rangeRestrictionUpper - y(x, coefficients)) * accuracy);
                 areaM = areaM + Math.abs((rangeRestrictionUpper - y(x + accuracy * 0.5, coefficients)) * accuracy);
-                length = length + distanceFormula(x, coefficients, accuracy);
+                length = length + distanceFormula(x, coefficients, accuracy);;
                 areaT = areaT + Math.abs(rangeRestrictionUpper * accuracy - trapezoidalArea(x, coefficients, accuracy));
                 x = x + accuracy;
+
             }
+
+
         }
 
         return [areaL, areaM, areaR, areaT, length];
     }
-
-    var firstResults = areaCalculation(firstFunctionCoefficients, firstFuncPoints, accuracy);
-    var secondResults = areaCalculation(secondFunctionCoefficients, secondFuncPoints, accuracy);
-
-    console.log(firstResults);
-    console.log(secondResults);
-
-    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), firstResults[4] + secondResults[4]];
-
+    var firstResults = areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy);
+    var secondResults = areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy);
+    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), (firstResults[4] + secondResults[4])];
+    console.log(areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy));
+    console.log(areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy));
     return finalResults;
 }
-
-var array = Array(Array(0, 3), Array(1, 4), Array(2, 3));
-areaOfRegion(array, 0.001, 100);
+console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.001, 8));
+//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
+//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[8,0],[9,0],[10,0],[11,0],[12,0],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
+//[-3,0],[-2,5],[-1,8],[0,9],[1,8],[2,5],[3,0],[2,-5],[1,-8],[0,-9],[-1,-8],[-2,-5],[-3,-0]
