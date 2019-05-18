@@ -129,6 +129,10 @@ function helpToggle() {
     }
 }
 
+function calculate() {
+
+}
+
 function drawDot(ctx, x, y, size) {
     r = 50; g = 50; b = 50; a = 150;
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a / 255 + ")";
