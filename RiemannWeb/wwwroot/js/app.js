@@ -146,13 +146,14 @@ function pushEquation() {
 
         var editor = document.getElementById("editor");
         editor.innerHTML +=
-            "<img class=\"remove\" src=\"/img/remove.png\" onclick=\"removeEquation(" + (points.length - 1) + ")\" />";
+            "<img id=\"remove" + (points.length - 1) + "\" class=\"remove\" src=\"/img/remove.png\" onclick=\"removeEquation(" + (points.length - 1) + ")\" />";
 
         document.getElementById("calculate").style.display = "inline-block";
 
         console.log(points);
     }
     else {
+        // Remove points from canvas
         for (var i = 0; i < equation.length; i++) {
             ctx.clearRect(equation[i][0] - 8, equation[i][1] - 8, 16, 16);
         }
@@ -160,8 +161,21 @@ function pushEquation() {
     }
 }
 
+// Remove an equation from the list - called by user
 function removeEquation(index) {
-    alert("not implemented");
+    var equation = points[index];
+    points.splice(index);
+
+    // Remove points from canvas
+    for (var i = 0; i < equation.length; i++) {
+        ctx.clearRect(equation[i][0] - 8, equation[i][1] - 8, 16, 16);
+    }
+
+    document.querySelector("#remove" + index).remove();
+
+    if (points.length === 0) {
+        document.getElementById("calculate").style.display = "none";
+    }
 }
 
 function drawDot(ctx, x, y, size) {

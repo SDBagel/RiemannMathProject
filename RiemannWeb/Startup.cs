@@ -63,7 +63,7 @@ namespace RiemannWeb
                 routes.MapRoute(
                     "app",
                     "app",
-                    new { controller = "Camera", action = "Index", id = "" });
+                    new { controller = "Camera", action = "App", id = "" });
             });
         }
     }

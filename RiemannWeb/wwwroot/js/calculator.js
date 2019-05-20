@@ -152,7 +152,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var orderMax = degreeOfApproximationMax;
     const accuracy = widthOfRegion;
     var dataPoints = dataInput;
-    console.log(dataPoints);
+    //console.log(dataPoints);
     var xDataPoints = [];
     var yDataPoints = [];
 
@@ -170,16 +170,16 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var maxOrMin = true;
     var startingPoint = 0;
     //Jump to the earliest point that isn't max or min
-    for (var iteration = 0; maxOrMin === true; iteration++) {
-        if (xDataPoints[iteration] !== Math.max(...xDataPoints) && xDataPoints[iteration] !== Math.min(...xDataPoints)) {
-            startingPoint = iteration;
+    for (var c = 0; maxOrMin === true; c++) {
+        if (xDataPoints[c] !== Math.max(...xDataPoints) && xDataPoints[c] !== Math.min(...xDataPoints)) {
+            startingPoint = c;
             maxOrMin = false;
         }
     }
     var specificDataPoint = startingPoint;
     var firstMax = true;
     var firstMin = true;
-    for (var iteration = 0; iteration < xDataPoints.length; iteration++) {
+    for (var d = 0; d < xDataPoints.length; d++) {
         //Makes the iterations in modulus
         if (specificDataPoint > xDataPoints.length - 1) {
             specificDataPoint = 0;
@@ -201,7 +201,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 } else if (currentFunction === 1) {
                     secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
                     secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
-
                 }
             }
         }
@@ -222,7 +221,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 } else if (currentFunction === 1) {
                     secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
                     secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
-
                 }
             }
         }
@@ -236,25 +234,20 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
         specificDataPoint++;
     }
 
-    console.log("first function data: ");
+    /*console.log("first function data: ");
     console.log(firstFunctionDataPoints);
     console.log("second function data: ");
-    console.log(secondFunctionDataPoints);
+    console.log(secondFunctionDataPoints);*/
 
-    var errorListFOne = [];
-    var errorListFTwo = [];
-    /*for (var iteration = 2; iteration <= orderMax; iteration++) {
-      errorListFOne.push(polynomial(firstFunctionDataPoints, { order: iteration}));
-      errorListFTwo.push(polynomial(secondFunctionDataPoints, { order: iteration}));
-    }*/
     const result = polynomial(firstFunctionDataPoints, { order: orderMax });
     const result1 = polynomial(secondFunctionDataPoints, { order: orderMax });
-    console.log("First function regression coefficients: ");
+    /*console.log("First function regression coefficients: ");
     console.log(result.equation);
     console.log("Second function regression coefficients: ");
-    console.log(result1.equation);
+    console.log(result1.equation);*/
     var firstFunctionCoefficients = result.equation;
     var secondFunctionCoefficients = result1.equation;
+
     // Coefficients of equations, where a row is (x^0, x^1, x^2...), and every column represents a new equation
     // Restrictions set to define area
     var domainRestrictionLower = Math.min(...xDataPoints);
@@ -262,10 +255,10 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var rangeRestrictionLower = Math.min(...yDataPoints);
     var rangeRestrictionUpper = Math.max(...yDataPoints);
     var totalRestrictionArea = (Math.abs(domainRestrictionLower) + Math.abs(domainRestrictionUpper)) * (Math.abs(rangeRestrictionLower) + Math.abs(rangeRestrictionUpper));
-    console.log("Domain Lower Restriction: " + domainRestrictionLower);
+    /*console.log("Domain Lower Restriction: " + domainRestrictionLower);
     console.log("Domain Upper Restriction: " + domainRestrictionUpper);
     console.log("Range Lower Restriction: " + rangeRestrictionLower);
-    console.log("Range Upper Restriction: " + rangeRestrictionUpper);
+    console.log("Range Upper Restriction: " + rangeRestrictionUpper);*/
 
     //starting x value for the Riehmann sum calculations
     function y(xValue, coefficients) {
@@ -333,7 +326,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 length = length + distanceFormula(x, coefficients, accuracy);
                 areaT = areaT + Math.abs(rangeRestrictionUpper * accuracy - trapezoidalArea(x, coefficients, accuracy));
                 x = x + accuracy;
-
             }
         }
 

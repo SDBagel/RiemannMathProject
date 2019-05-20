@@ -4,7 +4,7 @@ namespace RiemannWeb.Controllers
 {
     public class CameraController : Controller
     {
-        public IActionResult Index()
+        public IActionResult App()
         {
             if (Request.Cookies.ContainsKey("DarkMode") && Request.Cookies["DarkMode"] == "true")
                 ViewData["DarkMode"] = true;
