@@ -95,6 +95,7 @@ a {
 }
 
 .remove {
+    display: inline-block;
     width: 70px;
 }
 

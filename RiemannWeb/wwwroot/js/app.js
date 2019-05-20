@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.addEventListener('mouseup', sketchpad_mouseUp, false);
 
         canvas.addEventListener('touchstart', sketchpad_touchStart, false);
+        canvas.addEventListener('touchend', sketchpad_touchEnd, false);
         canvas.addEventListener('touchmove', sketchpad_touchMove, false);
     }
 });
@@ -173,11 +174,12 @@ function removeEquation(index) {
 
     document.querySelector("#remove" + index).remove();
 
-    if (points.length === 0) {
+    if (document.getElementById("editor").childElementCount === 0) {
         document.getElementById("calculate").style.display = "none";
     }
 }
 
+// Draws a dot on canvas and adds to equation
 function drawDot(ctx, x, y, size) {
     r = 50; g = 50; b = 50; a = 150;
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a / 255 + ")";
@@ -191,6 +193,7 @@ function drawDot(ctx, x, y, size) {
     ctx.fill();
 }
 
+// Sketchpad mouse functions
 function sketchpad_mouseDown() {
     mouseDown = 1;
     drawDot(ctx, mouseX, mouseY, 8);
@@ -218,12 +221,15 @@ function getMousePos(e) {
     mouseY = e.layerY;
 }
 
+// Sketchpad touch functions
 function sketchpad_touchStart() {
-    pushEquation();
-
     getTouchPos();
     drawDot(ctx, touchX, touchY, 8);
     event.preventDefault();
+}
+
+function sketchpad_touchEnd() {
+    pushEquation();
 }
 
 function sketchpad_touchMove(e) {
