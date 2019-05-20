@@ -164,7 +164,7 @@ function pushEquation() {
 // Remove an equation from the list - called by user
 function removeEquation(index) {
     var equation = points[index];
-    points.splice(index);
+    points[index] = null;
 
     // Remove points from canvas
     for (var i = 0; i < equation.length; i++) {
