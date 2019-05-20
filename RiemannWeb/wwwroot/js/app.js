@@ -127,10 +127,13 @@ function clearPreview() {
 // Toggle show help menu
 function helpToggle() {
     if (helpMenu.style.display === "block") {
-        helpMenu.style.display = "none";
+        animateCSS(helpMenu, "fadeOutRight", false, function () {
+            helpMenu.style.display = "none";
+        });
     }
     else {
         helpMenu.style.display = "block";
+        animateCSS(helpMenu, "fadeInRight", false, null);
     }
 }
 
