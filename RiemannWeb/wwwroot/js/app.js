@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     file.onchange = preview;
 
-    canvas.height = innerHeight - 110;
     canvas.width = innerWidth;
+    canvas.height = innerHeight;
 
     // Attach event handlers for canvas
     if (canvas.getContext)
@@ -87,6 +87,8 @@ function retake() {
     video.play();
     snapButton.onclick = snap;
     snapButton.value = "Capture";
+    document.getElementById("editor").innerHTML = "";
+    document.getElementById("calculate").style.display = "none";
     canvas.style.display = "none";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -112,6 +114,8 @@ function clearPreview() {
     video.style.display = "block";
     document.getElementById("upload").src = "";
 
+    document.getElementById("editor").innerHTML = "";
+
     canvas.style.display = "none";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -133,11 +137,31 @@ function calculate() {
 
 }
 
+// Add equation to array, add removal button
+function pushEquation() {
+    if (canvas.style.display === "block") {
+        points.push(equation);
+        equation = [];
+
+        var editor = document.getElementById("editor");
+        editor.innerHTML +=
+            "<img class=\"remove\" src=\"/img/remove.png\" onclick=\"removeEquation(" + (points.length - 1) + ")\" />";
+
+        document.getElementById("calculate").style.display = "inline-block";
+
+        console.log(points);
+    }
+}
+
+function removeEquation(index) {
+    alert("not implemented");
+}
+
 function drawDot(ctx, x, y, size) {
     r = 50; g = 50; b = 50; a = 150;
     ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a / 255 + ")";
 
-    // Adds new 2D point to the equation
+    // Adds new point to the equation
     equation.push(new Array(x, y));
 
     ctx.beginPath();
@@ -154,10 +178,7 @@ function sketchpad_mouseDown() {
 function sketchpad_mouseUp() {
     mouseDown = 0;
 
-    // push equation to points array
-    points.push(equation);
-    equation = [];
-    console.log(points);
+    pushEquation();
 }
 
 function sketchpad_mouseMove(e) {
@@ -172,20 +193,12 @@ function getMousePos(e) {
     if (!e)
         e = event;
 
-    if (e.offsetX) {
-        mouseX = e.offsetX;
-        mouseY = e.offsetY;
-    }
-    else if (e.layerX) {
-        mouseX = e.layerX;
-        mouseY = e.layerY;
-    }
+    mouseX = e.layerX;
+    mouseY = e.layerY;
 }
 
 function sketchpad_touchStart() {
-    // push equation to points array
-    points.push(equation);
-    equation = [];
+    pushEquation();
 
     getTouchPos();
     drawDot(ctx, touchX, touchY, 8);
@@ -205,8 +218,9 @@ function getTouchPos(e) {
     if (e.touches) {
         if (e.touches.length === 1) {
             var touch = e.touches[0];
+
             touchX = touch.pageX;
-            touchY = touch.pageY - 110;
+            touchY = touch.pageY;
         }
     }
 }
