@@ -139,7 +139,8 @@ function calculate() {
 
 // Add equation to array, add removal button
 function pushEquation() {
-    if (canvas.style.display === "block") {
+    //if equation isnt a misclick and drawing is enabled
+    if (canvas.style.display === "block" && equation.length > 10) {
         points.push(equation);
         equation = [];
 
@@ -150,6 +151,12 @@ function pushEquation() {
         document.getElementById("calculate").style.display = "inline-block";
 
         console.log(points);
+    }
+    else {
+        for (var i = 0; i < equation.length; i++) {
+            ctx.clearRect(equation[i][0] - 8, equation[i][1] - 8, 16, 16);
+        }
+        equation = [];
     }
 }
 
