@@ -8,6 +8,17 @@ var touchX, touchY;
 var points = [];
 var equation = [];
 
+// Returns either 55 or 105 depending on screen width
+// For fixing input
+function getOffset() {
+    if (innerHeight < 600 || innerWidth < 1000) {
+        return 105
+    }
+    else {
+        return 55
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     video = document.getElementById("video");
     canvas = document.getElementById("canvas");
@@ -22,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     file.onchange = preview;
 
     canvas.width = innerWidth;
-    canvas.height = innerHeight;
+    canvas.height = innerHeight - getOffset();
 
     // Attach event handlers for canvas
     if (canvas.getContext)
@@ -221,7 +232,7 @@ function getMousePos(e) {
         e = event;
 
     mouseX = e.layerX;
-    mouseY = e.layerY;
+    mouseY = e.layerY - getOffset();
 }
 
 // Sketchpad touch functions
@@ -250,7 +261,7 @@ function getTouchPos(e) {
             var touch = e.touches[0];
 
             touchX = touch.pageX;
-            touchY = touch.pageY;
+            touchY = touch.pageY - getOffset();
         }
     }
 }
