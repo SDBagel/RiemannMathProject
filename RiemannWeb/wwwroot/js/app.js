@@ -12,10 +12,10 @@ var equation = [];
 // For fixing input
 function getOffset() {
     if (innerHeight < 600 || innerWidth < 1000) {
-        return 105
+        return 105;
     }
     else {
-        return 55
+        return 55;
     }
 }
 
@@ -63,6 +63,7 @@ function onMobile() {
     }
 }
 
+// Start live image feed or set error
 async function init() {
     const constraints = {
         video: {
@@ -148,6 +149,7 @@ function helpToggle() {
     }
 }
 
+// Accesses calculator.js to get data
 function calculate() {
 
 }
@@ -232,7 +234,7 @@ function getMousePos(e) {
         e = event;
 
     mouseX = e.layerX;
-    mouseY = e.layerY - getOffset();
+    mouseY = e.layerY;
 }
 
 // Sketchpad touch functions
