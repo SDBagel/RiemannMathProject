@@ -18,6 +18,9 @@
         <input id="calculate" class="button btn btn-info border-bottom" onclick="calculate()" type="button" value="Calculate" />
         <div id="editor" class="d-inline-block"></div>
     </div>
+    <div id="notification" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-danger border-bottom">
+        <p class="text-center">Please draw a straight line and enter in the measurement. <a class="text-danger" onclick="resetCalculate()">Reset</a> | <a class="text-info" onclick="cancelCalculate()">Cancel</a></p>
+    </div>
 
     <div id="help" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-left">
         <h1>Help</h1>

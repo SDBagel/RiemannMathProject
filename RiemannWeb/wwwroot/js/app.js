@@ -1,5 +1,6 @@
 ﻿var video, canvas, file, snapButton;
 var errorMsgElement, helpMenu = null;
+var notification, controls;
 
 var ctx;
 var mouseX, mouseY, mouseDown = 0;
@@ -27,6 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     errorMsgElement = document.querySelector("span#errorMsg");
     helpMenu = document.querySelector("#help");
+
+    notification = document.getElementById("notification");
+    controls = document.getElementById("controls");
 
     init();
 
@@ -151,7 +155,36 @@ function helpToggle() {
 
 // Accesses calculator.js to get data
 function calculate() {
+    animateCSS(controls, "fadeOutLeft", false, function () {
+        controls.style.display = "none";
+    });
+    notification.style.display = "block";
+    animateCSS(notification, "fadeIn", false, null);
 
+    // clear canvas
+    // enable editing for only one line
+    // get values
+
+    // 2D array with info for each function
+    var results = [];
+
+    for (var i = 0; i < points.length; i++) {
+        // Push [areaL, areaM, areaR, areaT, length]
+        results.push(areaOfRegion(points[i], 0.1, 16));
+    }
+
+    // redirect with info from "ruler" & results to Results page
+}
+
+function cancelCalculate() {
+    var notification = document.getElementById("notification");
+    var controls = document.getElementById("controls");
+
+    controls.style.display = "block";
+    animateCSS(controls, "fadeInLeft", false, null);
+    animateCSS(notification, "fadeOut", false, function () {
+        notification.style.display = "none";
+    });
 }
 
 // Add equation to array, add removal button
@@ -167,7 +200,7 @@ function pushEquation() {
 
         document.getElementById("calculate").style.display = "inline-block";
 
-        console.log(points);
+        //console.log(points);
     }
     else {
         // Remove points from canvas

@@ -152,7 +152,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var orderMax = degreeOfApproximationMax;
     const accuracy = widthOfRegion;
     var dataPoints = dataInput;
-    //console.log(dataPoints);
     var xDataPoints = [];
     var yDataPoints = [];
 
@@ -234,17 +233,8 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
         specificDataPoint++;
     }
 
-    /*console.log("first function data: ");
-    console.log(firstFunctionDataPoints);
-    console.log("second function data: ");
-    console.log(secondFunctionDataPoints);*/
-
     const result = polynomial(firstFunctionDataPoints, { order: orderMax });
     const result1 = polynomial(secondFunctionDataPoints, { order: orderMax });
-    /*console.log("First function regression coefficients: ");
-    console.log(result.equation);
-    console.log("Second function regression coefficients: ");
-    console.log(result1.equation);*/
     var firstFunctionCoefficients = result.equation;
     var secondFunctionCoefficients = result1.equation;
 
@@ -255,10 +245,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var rangeRestrictionLower = Math.min(...yDataPoints);
     var rangeRestrictionUpper = Math.max(...yDataPoints);
     var totalRestrictionArea = (Math.abs(domainRestrictionLower) + Math.abs(domainRestrictionUpper)) * (Math.abs(rangeRestrictionLower) + Math.abs(rangeRestrictionUpper));
-    /*console.log("Domain Lower Restriction: " + domainRestrictionLower);
-    console.log("Domain Upper Restriction: " + domainRestrictionUpper);
-    console.log("Range Lower Restriction: " + rangeRestrictionLower);
-    console.log("Range Upper Restriction: " + rangeRestrictionUpper);*/
 
     //starting x value for the Riehmann sum calculations
     function y(xValue, coefficients) {
@@ -304,8 +290,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
         for (var iteration = 0; iteration <= currentDataset.length - 1; iteration++) {
             functionYDataPoints.push(currentDataset[iteration][1]);
         }
-        console.log(functionXDataPoints);
-        console.log(functionYDataPoints);
+
         if (Math.min(...functionYDataPoints) === Math.min(...yDataPoints)) {
             while (x <= domainRestrictionUpper - accuracy) {
                 areaL = areaL + Math.abs((y(x, coefficients) - rangeRestrictionLower) * accuracy);
@@ -314,7 +299,6 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 length = length + distanceFormula(x, coefficients, accuracy);
                 areaT = areaT + Math.abs(trapezoidalArea(x, coefficients, accuracy) - rangeRestrictionLower * accuracy);
                 x = x + accuracy;
-                //console.log("Lower Function area. x: " + x + " areaL: " + areaL);
             }
         }
 
@@ -334,11 +318,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
     var firstResults = areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy);
     var secondResults = areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy);
     var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), firstResults[4] + secondResults[4]];
-    console.log(areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy));
-    console.log(areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy));
+
     return finalResults;
 }
 console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.001, 8));
-//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
-//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[8,0],[9,0],[10,0],[11,0],[12,0],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
-//[-3,0],[-2,5],[-1,8],[0,9],[1,8],[2,5],[3,0],[2,-5],[1,-8],[0,-9],[-1,-8],[-2,-5],[-3,-0]

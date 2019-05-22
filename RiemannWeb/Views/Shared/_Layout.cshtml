@@ -33,7 +33,7 @@
     </div>
 
     <footer class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-top footer text-muted">
-        <div class="content">
+        <div class="content @((bool)ViewData["DarkMode"]?"text-light":"text-dark")">
             &copy; 2019 - RiemannWeb - <a class="link-color" onclick="transitionOut('terms')">Privacy and Terms</a>
         </div>
     </footer>

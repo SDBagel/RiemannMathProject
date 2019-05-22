@@ -34,6 +34,14 @@ a {
     right: 0;
 }
 
+.fullscreen #notification {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
 .fullscreen #controls {
     width: 150px;
     position: absolute;
