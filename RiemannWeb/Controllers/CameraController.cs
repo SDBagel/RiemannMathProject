@@ -13,15 +13,5 @@ namespace RiemannWeb.Controllers
 
             return View();
         }
-
-        public IActionResult Results()
-        {
-            if (Request.Cookies.ContainsKey("DarkMode") && Request.Cookies["DarkMode"] == "true")
-                ViewData["DarkMode"] = true;
-            else
-                ViewData["DarkMode"] = false;
-
-            return View();
-        }
     }
 }

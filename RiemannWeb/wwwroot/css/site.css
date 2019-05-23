@@ -121,6 +121,10 @@ a {
     text-align: justify;
 }
 
+#results {
+    display: none;
+}
+
 .page-center {
     margin-top: 15vh;
     height: 600px;

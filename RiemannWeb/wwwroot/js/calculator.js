@@ -321,4 +321,4 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
 
     return finalResults;
 }
-console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.001, 8));
+//console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.001, 8));

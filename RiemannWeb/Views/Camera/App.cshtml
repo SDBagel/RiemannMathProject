@@ -10,6 +10,7 @@
 
     <video id="video" class="capture" playsinline autoplay></video>
     <img id="upload" />
+    <canvas id="rulerCanvas"></canvas>
     <canvas id="canvas"></canvas>
 
     <div id="controls" class="@((bool)ViewData["DarkMode"]?"bg-dark":"bg-light") border-bottom border-right">
@@ -39,4 +40,11 @@
         <br /><br />
     </div>
     <input id="helpButton" class="button btn btn-info" onclick="helpToggle()" type="button" value="Help" />
+</div>
+<div id="results" class="text-center">
+    <h1>Results:</h1>
+    <hr />
+    <div id="functions">
+
+    </div>
 </div>

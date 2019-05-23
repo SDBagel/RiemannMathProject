@@ -1,10 +1,16 @@
-﻿var video, canvas, file, snapButton;
-var errorMsgElement, helpMenu = null;
+﻿// YOLO: 100%; console.log("I'm not sorry for this code.");
+var video, canvas, file, snapButton;
+var errorMsgElement, helpMenu;
 var notification, controls;
 
 var ctx;
 var mouseX, mouseY, mouseDown = 0;
 var touchX, touchY;
+
+var rulerCanvas, rulerCtx;
+var rulerMode = false;
+var rulerStart, rulerEnd, rulerCm;
+var pixelScale;
 
 var points = [];
 var equation = [];
@@ -32,12 +38,17 @@ document.addEventListener("DOMContentLoaded", function () {
     notification = document.getElementById("notification");
     controls = document.getElementById("controls");
 
+    rulerCanvas = document.getElementById("rulerCanvas");
+
     init();
 
     file.onchange = preview;
 
+    var offset = getOffset();
     canvas.width = innerWidth;
-    canvas.height = innerHeight - getOffset();
+    canvas.height = innerHeight - offset;
+    rulerCanvas.width = innerWidth;
+    rulerCanvas.height = innerHeight - offset;
 
     // Attach event handlers for canvas
     if (canvas.getContext)
@@ -51,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
         canvas.addEventListener('touchend', sketchpad_touchEnd, false);
         canvas.addEventListener('touchmove', sketchpad_touchMove, false);
     }
+
+    // Get context for ruler
+    if (rulerCanvas.getContext)
+        rulerCtx = rulerCanvas.getContext("2d");
 });
 
 // Check if on mobile device
@@ -161,9 +176,9 @@ function calculate() {
     notification.style.display = "block";
     animateCSS(notification, "fadeIn", false, null);
 
-    // clear canvas
-    // enable editing for only one line
-    // get values
+    rulerCanvas.style.display = "block";
+    rulerMode = true;
+    // get rulerCm
 
     // 2D array with info for each function
     var results = [];
@@ -173,7 +188,10 @@ function calculate() {
         results.push(areaOfRegion(points[i], 0.1, 16));
     }
 
-    // redirect with info from "ruler" & results to Results page
+}
+
+function confirmCalculate() {
+    document.getElementById("fullscreeen").style.display = "none";
 }
 
 function cancelCalculate() {
@@ -185,6 +203,14 @@ function cancelCalculate() {
     animateCSS(notification, "fadeOut", false, function () {
         notification.style.display = "none";
     });
+
+    rulerCtx.clearRect(0, 0, rulerCanvas.width, rulerCanvas.height);
+    rulerCanvas.style.display = "none";
+    rulerMode = false;
+}
+
+function resetCalculate() {
+    rulerCtx.clearRect(0, 0, rulerCanvas.width, rulerCanvas.height);
 }
 
 // Add equation to array, add removal button
@@ -230,16 +256,23 @@ function removeEquation(index) {
 
 // Draws a dot on canvas and adds to equation
 function drawDot(ctx, x, y, size) {
-    r = 50; g = 50; b = 50; a = 150;
-    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a / 255 + ")";
+    var cCtx;
+    if (rulerMode) {
+        cCtx = rulerCtx;
+        cCtx.fillStyle = "rgba(150, 50, 50, 0.7)";
+    }
+    else {
+        cCtx = ctx;
+        cCtx.fillStyle = "rgba(50, 50, 50, 0.7)";
 
-    // Adds new point to the equation
-    equation.push(new Array(x, y));
+        // Adds new point to the equation
+        equation.push(new Array(x, y));
+    }
 
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fill();
+    cCtx.beginPath();
+    cCtx.arc(x, y, size, 0, Math.PI * 2, true);
+    cCtx.closePath();
+    cCtx.fill();
 }
 
 // Sketchpad mouse functions
