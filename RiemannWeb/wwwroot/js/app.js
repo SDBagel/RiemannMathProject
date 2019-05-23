@@ -8,7 +8,7 @@ var mouseX, mouseY, mouseDown = 0;
 var touchX, touchY;
 
 var rulerCanvas, rulerCtx;
-var rulerMode = false;
+var rulerMode = false, newRulerEnabled = true;
 var rulerStart, rulerEnd, rulerCm;
 var pixelScale;
 
@@ -187,17 +187,27 @@ function calculate() {
         // Push [areaL, areaM, areaR, areaT, length]
         results.push(areaOfRegion(points[i], 0.1, 16));
     }
-
 }
 
-function confirmCalculate() {
-    document.getElementById("fullscreeen").style.display = "none";
+function getScale() {
+    var dist = Math.sqrt(Math.pow(rulerEnd[0] - rulerStart[0], 2) + Math.pow(rulerEnd[1] - rulerStart[1], 2));
+    return Math.abs(rulerCm) / dist;
+}
+
+function showConfirmCalculationPrompt() {
+    var dRP = document.getElementById("drawRulerPrompt");
+    var eMP = document.getElementById("enterMeasurementPrompt");
+
+    newRulerEnabled = false;
+
+    animateCSS(dRP, "fadeOutRight", false, function () {
+        dRP.style.display = "none";
+        eMP.style.display = "block";
+        animateCSS(eMP, "fadeInLeft", false, null);
+    });
 }
 
 function cancelCalculate() {
-    var notification = document.getElementById("notification");
-    var controls = document.getElementById("controls");
-
     controls.style.display = "block";
     animateCSS(controls, "fadeInLeft", false, null);
     animateCSS(notification, "fadeOut", false, function () {
@@ -210,13 +220,33 @@ function cancelCalculate() {
 }
 
 function resetCalculate() {
+    newRulerEnabled = true;
     rulerCtx.clearRect(0, 0, rulerCanvas.width, rulerCanvas.height);
+
+    var dRP = document.getElementById("drawRulerPrompt");
+    var eMP = document.getElementById("enterMeasurementPrompt");
+
+    animateCSS(eMP, "fadeOutRight", false, function () {
+        eMP.style.display = "none";
+        dRP.style.display = "block";
+        animateCSS(dRP, "fadeInLeft", false, null);
+    });
+}
+
+function confirmCalculate() {
+    rulerCm = document.getElementById("scaleInput").value;
+
+    var fs = document.getElementById("fullscreen");
+    var rs = document.getElementById("results");
+    animateCSS(fs, "fadeOut", true, null);
+    rs.style.display = "block";
+    animateCSS(rs, "fadeIn", true, null);
 }
 
 // Add equation to array, add removal button
 function pushEquation() {
     //if equation isnt a misclick and drawing is enabled
-    if (canvas.style.display === "block" && equation.length > 10) {
+    if (canvas.style.display === "block" && equation.length > 5) {
         points.push(equation);
         equation = [];
 
@@ -257,9 +287,12 @@ function removeEquation(index) {
 // Draws a dot on canvas and adds to equation
 function drawDot(ctx, x, y, size) {
     var cCtx;
-    if (rulerMode) {
+    if (rulerMode && newRulerEnabled) {
         cCtx = rulerCtx;
         cCtx.fillStyle = "rgba(150, 50, 50, 0.7)";
+    }
+    else if (!newRulerEnabled) {
+        return;
     }
     else {
         cCtx = ctx;
@@ -279,12 +312,22 @@ function drawDot(ctx, x, y, size) {
 function sketchpad_mouseDown() {
     mouseDown = 1;
     drawDot(ctx, mouseX, mouseY, 8);
+
+    if (rulerMode && newRulerEnabled) {
+        rulerCtx.clearRect(0, 0, rulerCanvas.width, rulerCanvas.height);
+        rulerStart = new Array(mouseX, mouseY);
+    }
 }
 
 function sketchpad_mouseUp() {
     mouseDown = 0;
 
-    pushEquation();
+    if (rulerMode && newRulerEnabled) {
+        rulerEnd = new Array(mouseX, mouseY);
+        showConfirmCalculationPrompt();
+    }
+    else
+        pushEquation();
 }
 
 function sketchpad_mouseMove(e) {
@@ -300,7 +343,7 @@ function getMousePos(e) {
         e = event;
 
     mouseX = e.layerX;
-    mouseY = e.layerY;
+    mouseY = e.layerY; // if you added - getOffset() to this, it would function on Edge. However, it does break it for literally everything else...
 }
 
 // Sketchpad touch functions
@@ -308,10 +351,18 @@ function sketchpad_touchStart() {
     getTouchPos();
     drawDot(ctx, touchX, touchY, 8);
     event.preventDefault();
+
+    if (rulerMode && newRulerEnabled)
+        rulerStart = new Array(touchX, touchY);
 }
 
 function sketchpad_touchEnd() {
-    pushEquation();
+    if (rulerMode && newRulerEnabled) {
+        rulerEnd = new Array(touchX, touchY);
+        showConfirmCalculationPrompt();
+    }
+    else
+        pushEquation();
 }
 
 function sketchpad_touchMove(e) {
