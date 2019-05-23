@@ -12,6 +12,7 @@ var rulerMode = false, newRulerEnabled = true;
 var rulerStart, rulerEnd, rulerCm;
 var pixelScale;
 
+var results = [];
 var points = [];
 var equation = [];
 
@@ -181,11 +182,12 @@ function calculate() {
     // get rulerCm
 
     // 2D array with info for each function
-    var results = [];
+    results = [];
 
     for (var i = 0; i < points.length; i++) {
         // Push [areaL, areaM, areaR, areaT, length]
-        results.push(areaOfRegion(points[i], 0.1, 16));
+        if (points[i] !== null)
+            results.push(areaOfRegion(points[i], 0.1));
     }
 }
 
@@ -233,6 +235,11 @@ function resetCalculate() {
     });
 }
 
+function round(num, places) {
+    var multiplier = Math.pow(10, places);
+    return Math.round(num * multiplier) / multiplier;
+}
+
 function confirmCalculate() {
     rulerCm = document.getElementById("scaleInput").value;
 
@@ -241,6 +248,11 @@ function confirmCalculate() {
     animateCSS(fs, "fadeOut", true, null);
     rs.style.display = "block";
     animateCSS(rs, "fadeIn", true, null);
+
+    var functions = document.getElementById("functions");
+    for (var i = 0; i < results.length; i++) {
+        functions.innerHTML += "<h2>Area of Equation " + i + ":</h2><p>" + round(results[i][0] * Math.pow(getScale(), 2), 3) + " cm^2</p><p>Length: " + round(results[i][4] * getScale(), 2) + " cm</p><br />";
+    }
 }
 
 // Add equation to array, add removal button

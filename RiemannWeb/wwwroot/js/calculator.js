@@ -147,38 +147,50 @@ function determinationCoefficient(data, results) {
 }
 
 // Script We Wrote
+/*
+    ______
+  (       ))
+  |       ||
+  | toast ||
+  |       ||
+  |_______|/
 
-function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
-    var orderMax = degreeOfApproximationMax;
+*/
+function areaOfRegion(dataInput, widthOfRegion) {
+
     const accuracy = widthOfRegion;
     var dataPoints = dataInput;
+    ////console.log(dataPoints);
     var xDataPoints = [];
     var yDataPoints = [];
 
     //extracts x values
-    for (var a = 0; a <= dataPoints.length - 1; a++) {
-        xDataPoints.push(dataPoints[a][0]);
+    for (var iteration = 0; iteration <= dataPoints.length - 1; iteration++) {
+        xDataPoints.push(dataPoints[iteration][0]);
     }
-    for (var b = 0; b <= dataPoints.length - 1; b++) {
-        yDataPoints.push(dataPoints[b][1]);
+    for (var iteration = 0; iteration <= dataPoints.length - 1; iteration++) {
+        yDataPoints.push(dataPoints[iteration][1]);
     }
-
+    var domainRestrictionLower = Math.min(...xDataPoints);
+    var domainRestrictionUpper = Math.max(...xDataPoints);
+    var rangeRestrictionLower = Math.min(...yDataPoints);
+    var rangeRestrictionUpper = Math.max(...yDataPoints);
     var firstFunctionDataPoints = [];
     var secondFunctionDataPoints = [];
     var currentFunction = 0;
     var maxOrMin = true;
     var startingPoint = 0;
     //Jump to the earliest point that isn't max or min
-    for (var c = 0; maxOrMin === true; c++) {
-        if (xDataPoints[c] !== Math.max(...xDataPoints) && xDataPoints[c] !== Math.min(...xDataPoints)) {
-            startingPoint = c;
+    for (var iteration = 0; maxOrMin === true; iteration++) {
+        if (xDataPoints[iteration] !== Math.max(...xDataPoints) && xDataPoints[iteration] !== Math.min(...xDataPoints)) {
+            startingPoint = iteration;
             maxOrMin = false;
         }
     }
     var specificDataPoint = startingPoint;
     var firstMax = true;
     var firstMin = true;
-    for (var d = 0; d < xDataPoints.length; d++) {
+    for (var iteration = 0; iteration < xDataPoints.length; iteration++) {
         //Makes the iterations in modulus
         if (specificDataPoint > xDataPoints.length - 1) {
             specificDataPoint = 0;
@@ -200,6 +212,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 } else if (currentFunction === 1) {
                     secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
                     secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
+
                 }
             }
         }
@@ -220,6 +233,7 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 } else if (currentFunction === 1) {
                     secondFunctionDataPoints.pop(dataPoints[specificDataPoint - 1]);
                     secondFunctionDataPoints.push(dataPoints[specificDataPoint]);
+
                 }
             }
         }
@@ -233,25 +247,79 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
         specificDataPoint++;
     }
 
-    const result = polynomial(firstFunctionDataPoints, { order: orderMax });
-    const result1 = polynomial(secondFunctionDataPoints, { order: orderMax });
-    var firstFunctionCoefficients = result.equation;
-    var secondFunctionCoefficients = result1.equation;
+    function yError(xValue, coefficients) {
+        var result = 0;
+        for (var iteration = 0; iteration <= coefficients.length - 1; iteration++) {
+            result = result + coefficients[coefficients.length - 1 - iteration] * Math.pow(xValue, iteration);
+        }
+        return result;
+    }
+    var degree1 = 0;
+    var degree = 0;
 
+    var cummulativeError = 0;
+    var cummulativeError1 = 0;
+    var errorListFOne = [];
+    var errorListFTwo = [];
+
+    var firstFunctionXDataPoints = [];
+    var firstFunctionYDataPoints = [];
+    //
+    for (var iteration = 0; iteration <= firstFunctionDataPoints.length - 1; iteration++) {
+        firstFunctionXDataPoints.push(firstFunctionDataPoints[iteration][0]);
+    }
+    for (var iteration = 0; iteration <= firstFunctionDataPoints.length - 1; iteration++) {
+        firstFunctionYDataPoints.push(firstFunctionDataPoints[iteration][1]);
+    }
+    var secondFunctionXDataPoints = [];
+    var secondFunctionYDataPoints = [];
+    //
+    for (var iteration = 0; iteration <= secondFunctionDataPoints.length - 1; iteration++) {
+        secondFunctionXDataPoints.push(secondFunctionDataPoints[iteration][0]);
+    }
+    for (var iteration = 0; iteration <= secondFunctionDataPoints.length - 1; iteration++) {
+        secondFunctionYDataPoints.push(secondFunctionDataPoints[iteration][1]);
+    }
+
+
+    for (var iteration = 1; Math.min(...errorListFOne) >= 0.1 && iteration <= 121; iteration++) {
+        cummulativeError = 0;
+        cummulativeError = 1;
+        degree = polynomial(firstFunctionDataPoints, { order: iteration });
+        degree1 = polynomial(secondFunctionDataPoints, { order: iteration });
+        for (var iterationOne = 0; iterationOne <= firstFunctionXDataPoints.length - 1; iterationOne++) {
+
+            cummulativeError = cummulativeError + Math.pow(firstFunctionYDataPoints[iterationOne] - yError(firstFunctionXDataPoints[iterationOne], degree.equation), 2);
+        }
+        errorListFOne.push(Math.sqrt(cummulativeError / firstFunctionDataPoints.length));
+        for (var iterationOne = 0; iterationOne <= secondFunctionXDataPoints.length - 1; iterationOne++) {
+            cummulativeError1 = cummulativeError1 + Math.pow(secondFunctionYDataPoints[iterationOne] - yError(secondFunctionXDataPoints[iterationOne], degree.equation), 2);
+        }
+        errorListFTwo.push(Math.sqrt(cummulativeError1 / secondFunctionDataPoints.length));
+    }
+
+    var optimizedFirstFunction = polynomial(firstFunctionDataPoints, { order: errorListFOne.indexOf(Math.min(...errorListFOne)) + 1 });
+    var optimizedSecondFunction = polynomial(secondFunctionDataPoints, { order: errorListFTwo.indexOf(Math.min(...errorListFTwo)) + 1 });
+    var firstFunctionCoefficients = optimizedFirstFunction.equation;
+    var secondFunctionCoefficients = optimizedSecondFunction.equation;
+    //console.log(firstFunctionCoefficients);
+    //console.log("hereyet"+yError(4,firstFunctionCoefficients));
     // Coefficients of equations, where a row is (x^0, x^1, x^2...), and every column represents a new equation
     // Restrictions set to define area
-    var domainRestrictionLower = Math.min(...xDataPoints);
-    var domainRestrictionUpper = Math.max(...xDataPoints);
-    var rangeRestrictionLower = Math.min(...yDataPoints);
-    var rangeRestrictionUpper = Math.max(...yDataPoints);
-    var totalRestrictionArea = (Math.abs(domainRestrictionLower) + Math.abs(domainRestrictionUpper)) * (Math.abs(rangeRestrictionLower) + Math.abs(rangeRestrictionUpper));
+
+    var totalRestrictionArea = ((domainRestrictionUpper - domainRestrictionLower) * (rangeRestrictionUpper - rangeRestrictionLower));
+    //console.log("Domain Lower Restriction: " + domainRestrictionLower);
+    //console.log("Domain Upper Restriction: " + domainRestrictionUpper);
+    //console.log("Range Lower Restriction: " + rangeRestrictionLower);
+    //console.log("Range Upper Restriction: " + rangeRestrictionUpper);
 
     //starting x value for the Riehmann sum calculations
     function y(xValue, coefficients) {
         var result = 0;
         for (var iteration = 0; iteration <= coefficients.length - 1; iteration++) {
-            result = result + coefficients[iteration] * Math.pow(xValue, iteration);
+            result = result + coefficients[coefficients.length - 1 - iteration] * Math.pow(xValue, iteration);
         }
+
         if (result > rangeRestrictionLower && result < rangeRestrictionUpper) {
             return result;
         } else if (result <= rangeRestrictionLower) {
@@ -290,16 +358,21 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
         for (var iteration = 0; iteration <= currentDataset.length - 1; iteration++) {
             functionYDataPoints.push(currentDataset[iteration][1]);
         }
-
+        //console.log(rangeRestrictionLower);
+        //console.log("RangeRestricionUpper"+rangeRestrictionUpper);
         if (Math.min(...functionYDataPoints) === Math.min(...yDataPoints)) {
             while (x <= domainRestrictionUpper - accuracy) {
-                areaL = areaL + Math.abs((y(x, coefficients) - rangeRestrictionLower) * accuracy);
-                areaR = areaR + Math.abs((y(x + accuracy, coefficients) - rangeRestrictionLower) * accuracy);
-                areaM = areaM + Math.abs((y(x + accuracy * 0.5, coefficients) - rangeRestrictionLower) * accuracy);
+                areaL = areaL + Math.abs((rangeRestrictionLower - y(x, coefficients)) * accuracy);
+                areaR = areaR + Math.abs((rangeRestrictionLower - y(x + accuracy, coefficients)) * accuracy);
+                areaM = areaM + Math.abs((rangeRestrictionLower - y(x + accuracy * 0.5, coefficients)) * accuracy);
                 length = length + distanceFormula(x, coefficients, accuracy);
                 areaT = areaT + Math.abs(trapezoidalArea(x, coefficients, accuracy) - rangeRestrictionLower * accuracy);
                 x = x + accuracy;
+                ////console.log(((rangeRestrictionLower - y(x, coefficients)) * accuracy));
+                //console.log(" here first Lower Function area. x: " + x + " areaL: " + areaL+"y = "+y(x, coefficients));
             }
+
+
         }
 
         if (Math.max(...functionYDataPoints) === Math.max(...yDataPoints)) {
@@ -307,18 +380,28 @@ function areaOfRegion(dataInput, widthOfRegion, degreeOfApproximationMax) {
                 areaL = areaL + Math.abs((rangeRestrictionUpper - y(x + accuracy, coefficients)) * accuracy);
                 areaR = areaR + Math.abs((rangeRestrictionUpper - y(x, coefficients)) * accuracy);
                 areaM = areaM + Math.abs((rangeRestrictionUpper - y(x + accuracy * 0.5, coefficients)) * accuracy);
-                length = length + distanceFormula(x, coefficients, accuracy);
+                length = length + distanceFormula(x, coefficients, accuracy);;
                 areaT = areaT + Math.abs(rangeRestrictionUpper * accuracy - trapezoidalArea(x, coefficients, accuracy));
                 x = x + accuracy;
+                //console.log("Lower Function area. x: " + x + " areaL: " + areaL);
             }
+
+
         }
+
+
 
         return [areaL, areaM, areaR, areaT, length];
     }
     var firstResults = areaCalculation(firstFunctionCoefficients, firstFunctionDataPoints, accuracy);
     var secondResults = areaCalculation(secondFunctionCoefficients, secondFunctionDataPoints, accuracy);
-    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), firstResults[4] + secondResults[4]];
-
+    //console.log("thing"+secondResults);
+    //console.log("thing"+firstResults);
+    //console.log(totalRestrictionArea)
+    var finalResults = [totalRestrictionArea - (firstResults[0] + secondResults[0]), totalRestrictionArea - (firstResults[1] + secondResults[1]), totalRestrictionArea - (firstResults[2] + secondResults[2]), totalRestrictionArea - (firstResults[3] + secondResults[3]), (firstResults[4] + secondResults[4])];
     return finalResults;
 }
-//console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.001, 8));
+//console.log(areaOfRegion([[0, 0], [1, 1], [2, 1], [3, 2], [4, 4], [6, 3], [7, 1], [6, -2], [5, -3], [3, -6], [2, -4], [1, -3], [0.5, -1]], 0.1));
+//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
+//[0,0],[1,1],[2,1],[3,2],[4,4],[6,3],[7,1],[8,0],[9,0],[10,0],[11,0],[12,0],[6,-2],[5,-3],[3,-6],[2,-4],[1,-3],[0.5,-1]
+//[-3,0],[-2,5],[-1,8],[0,9],[1,8],[2,5],[3,0],[2,-5],[1,-8],[0,-9],[-1,-8],[-2,-5],[-3,-0]
