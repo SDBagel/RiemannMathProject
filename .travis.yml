@@ -1,2 +1,6 @@
 language: csharp
 solution: RiemannMathProject.sln
+mono: none
+dotnet: 2.2.104
+script:
+ - dotnet restore
