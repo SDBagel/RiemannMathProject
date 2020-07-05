@@ -1,5 +1,5 @@
 # RiemannMathProject
-[![Build Status](https://travis-ci.org/SDBagel/RiemannMathProject.svg?branch=master)](https://travis-ci.org/SDBagel/RiemannMathProject) ![Yolo'd Code: 100%](https://sdbagel.github.io/static/img/yolo.png)
+[![Build Status](https://travis-ci.org/SDBagel/RiemannMathProject.svg?branch=master)](https://travis-ci.org/SDBagel/RiemannMathProject) ![Yolo'd Code: 100%](https://sdbagel.github.io/badges/yolo.svg)
 
 This is our group's semester two maths project. Our topic is Riemann sums, which approximate the area underneath a polynomial curve among other things. A live demonstration is available at http://riemann.ml.
 
